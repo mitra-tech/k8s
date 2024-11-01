@@ -23,11 +23,11 @@ spec:
           value: password
         resources:
           limits:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: "1Gi"
+            cpu: "0.5"
           requests:
-            memory: "128Mi"
-            cpu: "500m"
+            memory: "256Mi"
+            cpu: 100m
         ports:
         - name: queue
           containerPort: 5672
