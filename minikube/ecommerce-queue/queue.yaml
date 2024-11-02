@@ -14,31 +14,31 @@ spec:
         app: ecommerce-queue
     spec:
       containers:
-      - name: ecommerce-queue
-        image: rabbitmq:3.13-rc-management-alpine
-        env:
-        - name: RABBITMQ_DEFAULT_USER
-          value: username
-        - name: RABBITMQ_DEFAULT_PASS
-          value: password
-        resources:
-          limits:
-            memory: "1Gi"
-            cpu: "0.5"
-          requests:
-            memory: "256Mi"
-            cpu: 100m
-        ports:
-        - name: queue
-          containerPort: 5672
-          protocol: TCP
-        - name: mgmt
-          containerPort: 15672
-          protocol: TCP
-        volumeMounts:
-          - name: rabbittmq-local-storage
-            mountPath: /var/lib/rabbitmq
+        - name: ecommerce-queue
+          image: rabbitmq:3.13-rc-management-alpine
+          ports:
+            - name: queue
+              containerPort: 5672
+              protocol: TCP
+            - name: mgmt
+              containerPort: 15672
+              protocol: TCP
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: "username"
+            - name: RABBITMQ_DEFAULT_PASS
+              value: "password"
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: rabbittmq-local-storage
+              mountPath: /var/lib/rabbitmq
       volumes:
-      - name: rabbittmq-local-storage
-      persistentVolumeClaim:
-        claimName: rabbitmq-pvc
+        - name: rabbittmq-local-storage
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc
