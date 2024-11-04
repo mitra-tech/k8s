@@ -59,6 +59,7 @@ spec:
             - name: xpack.security.authc.token.enabled
               value: 'true'
             - name: ELASTIC_PASSWORD
+              value: 'password'
           ports:
           - name: ecmrc-elastic
             containerPort: 9200
