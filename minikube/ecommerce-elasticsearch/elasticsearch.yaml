@@ -59,7 +59,10 @@ spec:
             - name: xpack.security.authc.token.enabled
               value: 'true'
             - name: ELASTIC_PASSWORD
-              value: 'password'
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-backend-secret
+                  key: ecommerce-elasticsearch-password
           ports:
           - name: ecmrc-elastic
             containerPort: 9200

@@ -25,9 +25,15 @@ spec:
               protocol: TCP
           env:
             - name: RABBITMQ_DEFAULT_USER
-              value: "username"
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-backend-secret
+                  key: ecommerce-rabbitmq-user
             - name: RABBITMQ_DEFAULT_PASS
-              value: "password"
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-backend-secret
+                  key: ecommerce-rabbitmq-password
           resources:
             limits:
               cpu: "0.5"

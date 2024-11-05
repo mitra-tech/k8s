@@ -33,7 +33,10 @@ spec:
             - name: ELASTICSEARCH_USERNAME
               value: kibana_system
             - name: ELASTICSEARCH_PASSWORD
-              value: kibana
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-backend-secret
+                  key: ecommerce-elasticsearch-password
             - name: ELASTICSEARCH_SERVICEACCOUNT_TOKEN
               value: AAEAAWVsYXN0aWMva2liYW5hL2Vjb21tZXJjZS1raWJhbmE6b1VabXc0SEFSZDZZUlZ0b0lmUUo3dw
           volumeMounts:
