@@ -1,0 +1,187 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: heartbeat
+  namespace: production
+  labels:
+    k8s-app: heartbeat
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: heartbeat
+  labels:
+    k8s-app: heartbeat
+rules:
+- apiGroups: [""]
+  resources:
+  - nodes
+  - namespaces
+  - pods
+  - services
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources:
+    - replicasets
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["batch"]
+  resources:
+    - jobs
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: heartbeat
+  # should be the namespace where heartbeat is running
+  namespace: production
+  labels:
+    k8s-app: heartbeat
+rules:
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs: ["get", "create", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: heartbeat-kubeadm-config
+  namespace: production
+  labels:
+    k8s-app: heartbeat
+rules:
+  - apiGroups: [""]
+    resources:
+      - configmaps
+    resourceNames:
+      - kubeadm-config
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: heartbeat
+subjects:
+- kind: ServiceAccount
+  name: heartbeat
+  namespace: production
+roleRef:
+  kind: ClusterRole
+  name: heartbeat
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: heartbeat
+  namespace: production
+subjects:
+  - kind: ServiceAccount
+    name: heartbeat
+    namespace: production
+roleRef:
+  kind: Role
+  name: heartbeat
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: heartbeat-kubeadm-config
+  namespace: production
+subjects:
+  - kind: ServiceAccount
+    name: heartbeat
+    namespace: production
+roleRef:
+  kind: Role
+  name: heartbeat-kubeadm-config
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: heartbeat-deployment-config
+  namespace: production
+  labels:
+    k8s-app: heartbeat
+data:
+  heartbeat.yml: |-
+    heartbeat.monitors:
+    - type: http
+      id: Ecommerce-api-gateway
+      name: Ecommerce API Gateway Service
+      schedule: '@every 5s'
+      hosts: ["http://ecommerce-gateway.production.svc.cluster.local:4000/gateway-health"]
+      check.request.method: GET
+      check.response.status: [200]
+
+    - type: http
+      id: Ecommerce-notification
+      name: Ecommerce Notification Service
+      schedule: '@every 5s'
+      hosts: ["http://ecommerce-notification.production.svc.cluster.local:4001/notification-health"]
+      check.request.method: GET
+      check.response.status: [200]
+
+    - type: http
+      id: Ecommerce-auth
+      name: Ecommerce Auth Service
+      schedule: '@every 5s'
+      hosts: ["http://ecommerce-auth.production.svc.cluster.local:4002/auth-health"]
+      check.request.method: GET
+      check.response.status: [200]
+
+    - type: http
+      id: Ecommerce-users
+      name: Ecommerce Users Service
+      schedule: '@every 5s'
+      hosts: ["http://ecommerce-user.production.svc.cluster.local:4003/user-health"]
+      check.request.method: GET
+      check.response.status: [200]
+
+    - type: http
+      id: Ecommerce-gigs
+      name: Ecommerce Gigs Service
+      schedule: '@every 5s'
+      hosts: ["http://ecommerce-product.production.svc.cluster.local:4004/product-health"]
+      check.request.method: GET
+      check.response.status: [200]
+
+    - type: http
+      id: Ecommerce-chat
+      name: Ecommerce Chat Service
+      schedule: '@every 5s'
+      hosts: ["http://ecommerce-chat.production.svc.cluster.local:4005/chat-health"]
+      check.request.method: GET
+      check.response.status: [200]
+
+    - type: http
+      id: Ecommerce-orders
+      name: Ecommerce Orders Service
+      schedule: '@every 5s'
+      hosts: ["http://ecommerce-order.production.svc.cluster.local:4006/order-health"]
+      check.request.method: GET
+      check.response.status: [200]
+
+    - type: http
+      id: Ecommerce-reviews
+      name: Ecommerce Reviews Service
+      schedule: '@every 5s'
+      urls: ["http://ecommerce-review.production.svc.cluster.local:4007/review-health"]
+      check.request.method: GET
+      check.response.status: [200]
+
+    processors:
+    - add_cloud_metadata: ~
+    - add_docker_metadata: ~
+
+    monitoring.enabled: true
+
+    output.elasticsearch:
+      hosts: ['http://elasticsearch_container:9200']
+      username: 'elastic'
+      password: 'password'
+---
