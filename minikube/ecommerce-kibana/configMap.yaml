@@ -16,13 +16,13 @@ data:
     monitoring.ui.container.elasticsearch.enabled: true
     xpack.fleet.enabled: true
     xpack.fleet.agents.enabled: true
-    xpack.fleet.agents.elasticsearch.hosts: ["http://ecommerce-elastic.production.svc.cluster.local:9200"]
     xpack.reporting.roles.enabled: true
     xpack.fleet.agentIdVerificationEnabled: false
     xpack.security.encryptionKey: fhjskloppd678ehkdfdlliverpoolfcr
     xpack.encryptedSavedObjects.encryptionKey: fhjskloppd678ehkdfdlliverpoolfcr
-    xpack.encryptedSavedObjects.encryptionKey: ["http://ecommerce-elastic.production.svc.cluster.local:9200"]
+    xpack.fleet.agents.elasticsearch.hosts: ["http://ecommerce-elastic.production.svc.cluster.local:9200"]
 
+    
     ## Add policy for apm-server integration
     xpack.fleet.packages:
       - name: apm
