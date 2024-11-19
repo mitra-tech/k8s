@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecommerce-queue
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecommerce-queue
+  template:
+    metadata:
+      labels:
+        app: ecommerce-queue
+    spec:
+      containers:
+        - name: ecommerce-queue
+          image: rabbitmq:3.12.8-management-alpine
+          ports:
+            - name: queue
+              containerPort: 5672
+              protocol: TCP
+            - name: mgmt
+              containerPort: 15672
+              protocol: TCP
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-backend-secret
+                  key: ecommerce-rabbitmq-user
+            - name: RABBITMQ_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: ecommerce-backend-secret
+                  key: ecommerce-rabbitmq-password
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: "1Gi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+          volumeMounts:
+            - name: rabbittmq-local-storage
+              mountPath: /var/lib/rabbitmq
+      volumes:
+        - name: rabbittmq-local-storage
+          persistentVolumeClaim:
+            claimName: rabbitmq-pvc
