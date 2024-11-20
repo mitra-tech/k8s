@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: rabbitmq-pv
 spec:
-  storageClassName: rabbitmq-local-storage
+  storageClassName: ecommerce-queue-storage
   capacity:
     storage: 1Gi
   accessModes:
@@ -17,7 +17,7 @@ metadata:
   name: rabbitmq-pvc
   namespace: production
 spec:
-  storageClassName: rabbitmq-local-storage
+  storageClassName: ecommerce-queue-storage
   resources:
     requests:
       storage: 1Gi

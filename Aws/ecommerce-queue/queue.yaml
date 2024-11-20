@@ -42,9 +42,9 @@ spec:
               cpu: "100m"
               memory: "256Mi"
           volumeMounts:
-            - name: rabbittmq-local-storage
+            - name: rabbittmq-aws-storage
               mountPath: /var/lib/rabbitmq
       volumes:
-        - name: rabbittmq-local-storage
+        - name: rabbittmq-aws-storage
           persistentVolumeClaim:
             claimName: rabbitmq-pvc
