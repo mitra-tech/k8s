@@ -38,7 +38,7 @@ spec:
           - name: NODE_ENV
             value: 'production'
           - name: CLIENT_URL
-            value: 'http://localhost:3000'
+            value: 'https://api.ecommerceapp.xyz'
           - name: RABBITMQ_ENDPOINT
             valueFrom:
               secretKeyRef:

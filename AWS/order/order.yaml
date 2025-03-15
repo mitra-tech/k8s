@@ -75,7 +75,7 @@ spec:
           - name: API_GATEWAY_URL
             value: 'http://ecommerce-gateway:4000'
           - name: CLIENT_URL
-            value: 'https://ecommerceapp.info'
+            value: 'https://api.ecommerceapp.xyz'
           - name: STRIPE_API_KEY
             valueFrom:
               secretKeyRef:

@@ -73,7 +73,7 @@ spec:
                 name: ecommerce-backend-secret
                 key: cloud-api-secret
           - name: CLIENT_URL
-            value: 'https://ecommerceapp.info'
+            value: 'https://api.ecommerceapp.xyz'
           - name: API_GATEWAY_URL
             value: 'http://ecommerce-gateway.production.svc.cluster.local:4000'
           - name: ELASTIC_SEARCH_URL
