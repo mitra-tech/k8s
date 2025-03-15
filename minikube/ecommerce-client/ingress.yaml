@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ecommerce-client-ingress
+  namespace: production
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: ecommerce-client
+      port: 
+        number: 80
+  tls:
+    - hosts:
+      - jobberapp.info
+      secretName: ecommerce-client-tls
+  rules:
+  - host: ecommerceapp.info
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ecommerce-client
+            port: 
+              number: 80
